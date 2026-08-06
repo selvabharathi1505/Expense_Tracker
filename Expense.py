@@ -1,5 +1,4 @@
 class Expense:
-
     def __init__(self, name, category, amount, date):
         self.name = name
         self.category = category
@@ -11,62 +10,82 @@ class Expense:
 
 
 class ExpenseManager:
-
     def __init__(self):
         self.expenses = []
 
-    def add_expenses(self):
-        n = int(input("How many expanses do you want to enter?¨"))
-
+    def get_input(self):
+        n = int(input("How many expenses do you want to enter? "))
         for i in range(n):
-            print("\nExpense", i + 1)
-
+            print(f"\nEnter details for expense {i + 1}:")
             name = input("Enter Name: ")
             category = input("Enter Category: ")
             amount = float(input("Enter Amount: "))
-            date = input("Enter Date: ")
-
+            date = input("Enter Date (dd/mm/yyyy): ")
             expense = Expense(name, category, amount, date)
             self.expenses.append(expense)
 
-    def display_expenses(self):
-        print("\nExpense List")
-        for expense in self.expenses:
-            expense.display()
+    def show_expenses(self):
+        print("\nExpenses:")
+        for e in self.expenses:
+            e.display()
 
     def total_spending(self):
         total = 0
-        for expense in self.expenses:
-            total += expense.amount
+        for e in self.expenses:
+            total += e.amount
         return total
 
-    def category_spending(self):
-        data = {}
-
-        for expense in self.expenses:
-            if expense.category in data:
-                data[expense.category] += expense.amount
+    def category_wise_spending(self):
+        category_total = {}
+        for e in self.expenses:
+            if e.category in category_total:
+                category_total[e.category] += e.amount
             else:
-                data[expense.category] = expense.amount
+                category_total[e.category] = e.amount
+        return category_total
 
-        return data
-
-    def summary(self):
+    def show_summary(self):
         print("\nTotal Spending:", self.total_spending())
 
-        print("\nCategory-wise Spending")
-        data = self.category_spending()
+        print("\nCategory-wise Spending:")
+        for category, amount in self.category_wise_spending().items():
+            print(category, ":", amount)
+            
+    def update_expense(self):
 
-        for category in data:
-            print(category, ":", data[category])
+        search_date = input("Enter the date of the expense to update (dd/mm/yyyy): ")
 
+        found = False
 
+        for expense in self.expenses:
+
+            if expense.date == search_date:
+
+                print("\nExpense Found:")
+                expense.display()
+
+                expense.name = input("Enter new name: ")
+                expense.category = input("Enter new category: ")
+                expense.amount = float(input("Enter new amount: "))
+
+                print("\nExpense Updated Successfully!")
+                found = True
+                break
+
+        if not found:
+            print("No expense found on this date.")
+                
+        
+
+    
+    
 def main():
     manager = ExpenseManager()
-    manager.add_expenses()
-    manager.display_expenses()
-    manager.summary()
-
-
+    manager.get_input()
+    manager.show_expenses()
+    manager.show_summary()
+    manager.update_expense()
+         
 if __name__ == "__main__":
     main()
+    
