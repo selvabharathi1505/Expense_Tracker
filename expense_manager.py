@@ -20,6 +20,7 @@ class ExpenseManager:
         for i in range(choice):
             
             expense_id = self.get_next_id()
+            print(f"Enter the details for expense {i+1}: ")
             name = input("Enter Name: ")
             category = input("Enter Category: ")
             amount = float(input("Enter Amount: "))
@@ -47,10 +48,16 @@ class ExpenseManager:
             return
         
         expense_id = int(input("Enter ID to update: "))
+        found = False
+        
         for expense in expenses:
-            if expense.id != expense_id:
-                print("Expense ID not found")
-                return
+            if expense.id == expense_id:
+                found = True
+                break
+
+        if not found:
+            print("Expense ID not found")
+            return
         
         name = input("Enter new Name: ")
         category = input("Enter new Category: ")
@@ -70,10 +77,17 @@ class ExpenseManager:
             return
 
         expense_id = int(input("Enter ID to delete: "))
+        found = False
+        
         for expense in expenses:
-            if expense.id != expense_id:
-                print("Expense ID not found")
-                return
+            if expense.id == expense_id:
+                found = True
+                break
+
+        if not found:
+            print("Expense ID not found")
+            return
+    
         self.storage.delete(expense_id)
 
         print("Expense deleted successfully.")
