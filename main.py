@@ -1,19 +1,18 @@
 from csv_storage import CSVStorage
 from sqlite_storage import SQLiteStorage
 from expense_manager import ExpenseManager
-
+import sys
 
 def main():
 
-    print("1. CSV")
-    print("2. SQLite")
-
-    choice = input("Choose Storage: ")
+    choice = sys.argv[1]
 
     if choice == "1":
+        print("Using CSV Storage")
         storage = CSVStorage()
 
     elif choice == "2":
+        print("Using SQLite Storage")
         storage = SQLiteStorage()
 
     else:
