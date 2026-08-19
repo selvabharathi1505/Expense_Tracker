@@ -1,23 +1,29 @@
 from csv_storage import CSVStorage
 from sqlite_storage import SQLiteStorage
 from expense_manager import ExpenseManager
-import sys
+import argparse
+
 
 def main():
 
-    choice = sys.argv[1]
+    parser = argparse.ArgumentParser()
 
-    if choice == "1":
+    parser.add_argument(
+        "--storage",
+        choices=["csv", "sqlite"],
+        required=True,
+        help="Choose storage type: csv or sqlite"
+    )
+
+    args = parser.parse_args()
+
+    if args.storage == "csv":
         print("Using CSV Storage")
         storage = CSVStorage()
 
-    elif choice == "2":
+    elif args.storage == "sqlite":
         print("Using SQLite Storage")
         storage = SQLiteStorage()
-
-    else:
-        print("Invalid choice")
-        return
 
     manager = ExpenseManager(storage)
 
