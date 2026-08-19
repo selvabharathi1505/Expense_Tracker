@@ -18,12 +18,12 @@ The storage method can be selected when running the application through a comman
 * Store data using CSV
 * Store data using SQLite
 * Common storage interface using an abstract base class
-* Command-line storage selection using `sys.argv`
+* Command-line storage selection using `argparse`
 * Object-oriented design
 
 ## Technologies Used
 
-* **Python 3**
+* **Python**
 * **CSV**
 * **SQLite**
 * **Object-Oriented Programming (OOP)**
@@ -97,7 +97,7 @@ Both `CSVStorage` and `SQLiteStorage` implement these operations. This allows `E
 * Python 3.x
 * No external Python packages are required.
 
-The project uses Python's built-in `csv`, `sqlite3`, `abc`, and `sys` modules.
+The project uses Python's built-in `csv`, `sqlite3`, `abc`, and `argparse` modules.
 
 ## How to Run
 
@@ -119,10 +119,8 @@ The storage method is selected using a command-line argument.
 
 #### CSV Storage
 
-Use **`1`** for CSV storage:
-
 ```bash
-python main.py 1
+python main.py --storage csv
 ```
 
 Output:
@@ -131,11 +129,7 @@ Output:
 Using CSV Storage
 ```
 
-**`1 = CSV Storage`**
-
 #### SQLite Storage
-
-Use **`2`** for SQLite storage:
 
 ```bash
 python main.py 2
@@ -147,14 +141,12 @@ Output:
 Using SQLite Storage
 ```
 
-**`2 = SQLite Storage`**
-
 ### Quick Reference
 
-| Command            | Storage Method |
+| Command                             | Storage Method |
 | ------------------ | -------------- |
-| `python main.py 1` | CSV            |
-| `python main.py 2` | SQLite         |
+| `python main.py --storage csv`      | CSV            |
+| `python main.py --storage sqlite`   | SQLite         |
 
 ## Expense Menu
 
@@ -220,7 +212,7 @@ Select option `5` to close the application.
 When you run:
 
 ```bash
-python main.py 1
+python main.py --storage csv
 ```
 
 the application uses `CSVStorage`.
@@ -244,7 +236,7 @@ CSV storage provides a simple file-based approach for storing expense records.
 When you run:
 
 ```bash
-python main.py 2
+python main.py --storage sqlite
 ```
 
 the application uses `SQLiteStorage`.
@@ -320,7 +312,7 @@ This separation makes the project easier to maintain and allows different storag
 Run the application with CSV:
 
 ```bash
-python main.py 1
+python main.py --storage csv
 ```
 
 Then:
@@ -340,7 +332,7 @@ Enter choice: 1
 To use SQLite instead:
 
 ```bash
-python main.py 2
+python main.py --storage sqlite
 ```
 
 ## Future Improvements
