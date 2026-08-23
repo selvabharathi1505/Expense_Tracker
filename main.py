@@ -33,7 +33,8 @@ def main():
         print("2. Show Expenses")
         print("3. Update Expense")
         print("4. Delete Expense")
-        print("5. Exit")
+        print("5. Show Summary")
+        print("6. Exit")
 
         choice = input("Enter choice: ")
 
@@ -50,7 +51,10 @@ def main():
             manager.delete_expense()
 
         elif choice == "5":
-            print("Program ended.")
+            manager.show_summary()
+            
+        elif choice == "6":
+            print("Exiting...")
             break
 
         else:

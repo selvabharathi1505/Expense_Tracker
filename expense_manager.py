@@ -91,3 +91,49 @@ class ExpenseManager:
         self.storage.delete(expense_id)
 
         print("Expense deleted successfully.")
+        
+    
+    def total_spending(self):
+        expenses = self.storage.load()
+
+        if not expenses:
+            print("No expenses found.")
+            return
+
+        total = 0
+        for expense in expenses:
+            total += expense.amount
+
+        return total
+
+
+    def category_wise_spending(self):
+        expenses = self.storage.load()
+
+        if not expenses:
+            print("No expenses found.")
+            return
+
+        category_totals = {}
+
+        for expense in expenses:
+            if expense.category in category_totals:
+                category_totals[expense.category] += expense.amount
+            else:
+                category_totals[expense.category] = expense.amount
+
+        return category_totals
+        
+    def show_summary(self):
+
+        print("\nExpense Summary:")
+        print(f"Total Spending: $ {self.total_spending()}")
+
+        print("\nCategory-wise Spending:")
+        
+        for category, total in self.category_wise_spending().items():
+            print(f"{category}: $ {total:.2f}")
+            
+   
+
+        
