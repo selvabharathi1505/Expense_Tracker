@@ -39,16 +39,52 @@ def main():
         choice = input("Enter choice: ")
 
         if choice == "1":
-            manager.add_expense()
+            count = int(input("Enter how many expenses to be added: "))
+
+            for i in range(count):
+
+                print(f"Enter the details for expense {i + 1}:")
+
+                name = input("Enter Name: ")
+                category = input("Enter Category: ")
+                amount = float(input("Enter Amount: "))
+                date = input("Enter Date (dd/mm/yyyy): ")
+
+                manager.add_expense(name,category,amount,date)
+            print("Expense added successfully.")
 
         elif choice == "2":
             manager.show_expenses()
 
         elif choice == "3":
-            manager.update_expense()
+            manager.show_expenses()
+
+            expense_id = int(input("Enter ID to update: "))
+
+            name = input("Enter new Name: ")
+            category = input("Enter new Category: ")
+            amount = float(input("Enter new Amount: "))
+            date = input("Enter new Date: ")
+
+            result = manager.update_expense(expense_id,name,category,amount,date)
+
+            if result:
+                print("Expense updated successfully.")
+            else:
+                print("Expense ID not found")
 
         elif choice == "4":
-            manager.delete_expense()
+            manager.show_expenses()
+
+            expense_id = int(input("Enter ID to delete: "))
+
+            result = manager.delete_expense(expense_id)
+
+            if result:
+                print("Expense deleted successfully.")
+            else:
+                print("Expense ID not found")
+
 
         elif choice == "5":
             manager.show_summary()

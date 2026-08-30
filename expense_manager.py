@@ -1,7 +1,5 @@
 from expense import Expense
 
-
-
 class ExpenseManager:
 
     def __init__(self, storage):
@@ -15,21 +13,12 @@ class ExpenseManager:
 
         return max(e.id for e in expenses) + 1
 
-    def add_expense(self):
-        choice= int(input("enter how many expenses to be added: "))
-        for i in range(choice):
-            
-            expense_id = self.get_next_id()
-            print(f"Enter the details for expense {i+1}: ")
-            name = input("Enter Name: ")
-            category = input("Enter Category: ")
-            amount = float(input("Enter Amount: "))
-            date = input("Enter Date (dd/mm/yyyy): ")
+    def add_expense(self, name, category, amount, date):
+        expense_id = self.get_next_id()
+        expense = Expense(expense_id, name, category, amount, date)
 
-            expense = Expense(expense_id, name, category, amount, date)
-            self.storage.add(expense)
+        self.storage.add(expense)
 
-        print("Expense added successfully.")
 
     def show_expenses(self):
         expenses = self.storage.load()
@@ -41,13 +30,11 @@ class ExpenseManager:
         for expense in expenses:
             expense.display()
 
-    def update_expense(self):
-        self.show_expenses()
+    def update_expense(self,expense_id, name, category, amount, date):
         expenses = self.storage.load()
         if len(expenses) == 0:
-            return
+            return False
         
-        expense_id = int(input("Enter ID to update: "))
         found = False
         
         for expense in expenses:
@@ -56,27 +43,20 @@ class ExpenseManager:
                 break
 
         if not found:
-            print("Expense ID not found")
-            return
-        
-        name = input("Enter new Name: ")
-        category = input("Enter new Category: ")
-        amount = float(input("Enter new Amount: "))
-        date = input("Enter new Date: ")
+    
+            return False
 
         expense = Expense(expense_id, name, category, amount, date)
         self.storage.update(expense_id, expense)
 
-        print("Expense updated successfully.")
+        return True
 
-    def delete_expense(self):
-        self.show_expenses()
+    def delete_expense(self, expense_id):
         
         expenses = self.storage.load()
         if len(expenses) == 0:
-            return
+            return False
 
-        expense_id = int(input("Enter ID to delete: "))
         found = False
         
         for expense in expenses:
@@ -85,13 +65,13 @@ class ExpenseManager:
                 break
 
         if not found:
-            print("Expense ID not found")
-            return
+            
+            return False
     
         self.storage.delete(expense_id)
 
-        print("Expense deleted successfully.")
         
+        return True
     
     def total_spending(self):
         expenses = self.storage.load()
