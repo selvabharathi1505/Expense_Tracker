@@ -30,15 +30,12 @@ def test_category_wise_spending(tmp_path):
     assert result["Food"] == 20
     assert result["Travel"] == 30
     
-def test_add_expense(tmp_path, monkeypatch):
-
+def test_add_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
-    manager = ExpenseManager(storage)
-    inputs = iter([ 1,"Lunch","Food",20,"23/08/2026"])
-    monkeypatch.setattr("builtins.input", lambda _: next(inputs) )
-    manager.add_expense()
 
+    manager = ExpenseManager(storage)
+    manager.add_expense("Lunch", "Food", 20,"23/08/2026")
     expenses = storage.load()
 
     assert len(expenses) == 1
@@ -46,44 +43,50 @@ def test_add_expense(tmp_path, monkeypatch):
     assert expenses[0].category == "Food"
     assert expenses[0].amount == 20
     assert expenses[0].date == "23/08/2026"
-    
-def test_update_expense(tmp_path, monkeypatch):
+
+def test_update_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
-    expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
-    expense2 = Expense(2,"Uber","Travel",30,"23/08/2026")
-    expense3 = Expense(3,"Dinner","Food",40,"23/08/2026")
+    expense1 = Expense(1, "Lunch", "Food", 20, "23/08/2026")
+    expense2 = Expense(2, "Uber", "Travel", 30, "23/08/2026")
+    expense3 = Expense(3, "Dinner", "Food", 40, "23/08/2026")
 
     storage.add(expense1)
     storage.add(expense2)
     storage.add(expense3)
 
     manager = ExpenseManager(storage)
-    inputs = iter(["2","Uber","Travel","50","23/08/2026"])
-    monkeypatch.setattr("builtins.input",lambda _: next(inputs))
-    manager.update_expense()
+
+    result = manager.update_expense(2,"Uber","Travel",50,"23/08/2026")
+
+    assert result is True
+
     expenses = storage.load()
+
     assert expenses[1].name == "Uber"
     assert expenses[1].amount == 50
+
     
-def test_update_nonexistent_expense(tmp_path, monkeypatch, capsys):
+def test_update_nonexistent_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
+
     expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
     storage.add(expense1)
-    manager = ExpenseManager(storage)
-    monkeypatch.setattr("builtins.input",lambda _: "99")
 
-    manager.update_expense()
-    captured = capsys.readouterr()
-    assert "Expense ID not found" in captured.out
+    manager = ExpenseManager(storage)
+    result = manager.update_expense(99,"Dinner","Food",40,"23/08/2026")
+
+    assert result is False
     expenses = storage.load()
+
     assert len(expenses) == 1
     assert expenses[0].name == "Lunch"
     assert expenses[0].amount == 20
     
-def test_delete_expense(tmp_path, monkeypatch):
+    
+def test_delete_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
@@ -94,27 +97,31 @@ def test_delete_expense(tmp_path, monkeypatch):
     storage.add(expense1)
     storage.add(expense2)
     storage.add(expense3)
-    manager = ExpenseManager(storage)
-    monkeypatch.setattr("builtins.input",lambda _: "1")
 
-    manager.delete_expense()
+    manager = ExpenseManager(storage)
+
+    result = manager.delete_expense(1)
+    assert result is True
     expenses = storage.load()
+
     assert len(expenses) == 2
     assert expenses[0].name == "Uber"
     assert expenses[1].name == "Dinner"
     
     
-def test_delete_nonexistent_expense(tmp_path, monkeypatch, capsys):
+def test_delete_nonexistent_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
+    
     expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
     storage.add(expense1)
+    
     manager = ExpenseManager(storage)
-    monkeypatch.setattr("builtins.input",lambda _: "99")
 
-    manager.delete_expense()
-    captured = capsys.readouterr()
-    assert "Expense ID not found" in captured.out
+    result = manager.delete_expense(99)
+
+    assert result is False
+    
     expenses = storage.load()
     assert len(expenses) == 1
     assert expenses[0].name == "Lunch"
