@@ -58,6 +58,12 @@ def main():
 
         elif choice == "3":
             manager.show_expenses()
+            
+            expenses = manager.get_expenses()
+
+            if not expenses:
+                print("No expenses available to update.")
+                continue
 
             expense_id = int(input("Enter ID to update: "))
 
@@ -75,6 +81,12 @@ def main():
 
         elif choice == "4":
             manager.show_expenses()
+            
+            expenses = manager.get_expenses()
+
+            if not expenses:
+                print("No expenses available to delete.")
+                continue
 
             expense_id = int(input("Enter ID to delete: "))
 

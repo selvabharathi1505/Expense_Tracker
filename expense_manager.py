@@ -12,12 +12,27 @@ class ExpenseManager:
             return 1
 
         return max(e.id for e in expenses) + 1
+    
+    def get_expenses(self):
+        return self.storage.load()
+
+
+    def get_expense(self, expense_id):
+        expenses = self.storage.load()
+
+        for expense in expenses:
+            if expense.id == expense_id:
+                return expense
+
+        return None
 
     def add_expense(self, name, category, amount, date):
         expense_id = self.get_next_id()
         expense = Expense(expense_id, name, category, amount, date)
 
         self.storage.add(expense)
+        
+        return expense
 
 
     def show_expenses(self):
@@ -30,20 +45,17 @@ class ExpenseManager:
         for expense in expenses:
             expense.display()
 
-    def update_expense(self,expense_id, name, category, amount, date):
+    def update_expense(self, expense_id, name, category, amount, date):
         expenses = self.storage.load()
-        if len(expenses) == 0:
-            return False
-        
+
         found = False
-        
+
         for expense in expenses:
             if expense.id == expense_id:
                 found = True
                 break
 
         if not found:
-    
             return False
 
         expense = Expense(expense_id, name, category, amount, date)
@@ -54,8 +66,7 @@ class ExpenseManager:
     def delete_expense(self, expense_id):
         
         expenses = self.storage.load()
-        if len(expenses) == 0:
-            return False
+       
 
         found = False
         
@@ -76,9 +87,8 @@ class ExpenseManager:
     def total_spending(self):
         expenses = self.storage.load()
 
-        if not expenses:
-            print("No expenses found.")
-            return
+        if len(expenses) == 0:
+            return 0
 
         total = 0
         for expense in expenses:
@@ -89,10 +99,6 @@ class ExpenseManager:
 
     def category_wise_spending(self):
         expenses = self.storage.load()
-
-        if not expenses:
-            print("No expenses found.")
-            return
 
         category_totals = {}
 
@@ -111,7 +117,13 @@ class ExpenseManager:
 
         print("\nCategory-wise Spending:")
         
-        for category, total in self.category_wise_spending().items():
+        category_totals = self.category_wise_spending()
+        
+        if len(category_totals) == 0:
+            print("No expenses found.")
+            return
+        
+        for category, total in category_totals.items():
             print(f"{category}: $ {total:.2f}")
             
    
