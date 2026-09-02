@@ -1,13 +1,36 @@
+import os
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from expense_manager import ExpenseManager
 from csv_storage import CSVStorage
+from sqlite_storage import SQLiteStorage
 
 
 app = FastAPI()
 
-storage = CSVStorage("expenses.csv")
+
+storage_type = os.getenv("STORAGE_TYPE")
+
+if storage_type is None:
+    raise ValueError(
+        "STORAGE_TYPE is required. Please set it to 'csv' or 'sqlite'."
+    )
+
+if storage_type == "csv":
+    storage = CSVStorage("expenses.csv")
+
+elif storage_type == "sqlite":
+    storage = SQLiteStorage("expenses.db")
+
+else:
+    raise ValueError(
+        f"Invalid storage type: {storage_type}. "
+        "Please choose 'csv' or 'sqlite'."
+    )
+
+
 manager = ExpenseManager(storage)
 
 
