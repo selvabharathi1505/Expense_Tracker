@@ -1,6 +1,7 @@
 import sqlite3
 from expense import Expense
 from storage import Storage
+from datetime import datetime
 
 class SQLiteStorage(Storage):
 
@@ -27,7 +28,7 @@ class SQLiteStorage(Storage):
             cursor = conn.execute("SELECT id, name, category, amount, date FROM expenses")
 
             for row in cursor:
-                expenses.append(Expense(row[0], row[1], row[2], row[3], row[4]))
+                expenses.append(Expense(row[0], row[1], row[2], row[3], datetime.strptime(row[4], "%d/%m/%Y").date()))
 
         return expenses
 
@@ -36,7 +37,7 @@ class SQLiteStorage(Storage):
             conn.execute("""
                 INSERT INTO expenses (id, name, category, amount, date)
                 VALUES (?, ?, ?, ?, ?)
-            """, (expense.id, expense.name, expense.category, expense.amount, expense.date))
+            """, (expense.id, expense.name, expense.category, expense.amount, expense.date.strftime("%d/%m/%Y")))
 
     def update(self, expense_id, expense):
         with sqlite3.connect(self.filename) as conn:
@@ -44,7 +45,7 @@ class SQLiteStorage(Storage):
                 UPDATE expenses
                 SET name = ?, category = ?, amount = ?, date = ?
                 WHERE id = ?
-            """, (expense.name, expense.category, expense.amount, expense.date, expense_id))
+            """, (expense.name, expense.category, expense.amount, expense.date.strftime("%d/%m/%Y"), expense_id))
 
     def delete(self, expense_id):
         with sqlite3.connect(self.filename) as conn:

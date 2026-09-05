@@ -1,6 +1,7 @@
 import csv
 from expense import Expense
 from storage import Storage
+from datetime import datetime
 
 class CSVStorage(Storage):
 
@@ -15,7 +16,7 @@ class CSVStorage(Storage):
                 reader = csv.DictReader(file)
 
                 for row in reader:
-                    expenses.append(Expense(int(row["id"]), row["name"], row["category"], float(row["amount"]), row["date"]))
+                    expenses.append(Expense(int(row["id"]), row["name"], row["category"], float(row["amount"]), datetime.strptime(row["date"], "%d/%m/%Y").date()))
 
         except FileNotFoundError:
             pass
@@ -29,7 +30,7 @@ class CSVStorage(Storage):
             if file.tell() == 0:
                 writer.writerow(["id", "name", "category", "amount", "date"])
 
-            writer.writerow([expense.id, expense.name, expense.category, expense.amount, expense.date])
+            writer.writerow([expense.id, expense.name, expense.category, expense.amount, expense.date.strftime("%d/%m/%Y")])
 
     def update(self, expense_id, expense):
         expenses = self.load()
@@ -46,7 +47,7 @@ class CSVStorage(Storage):
             writer.writerow(["id", "name", "category", "amount", "date"])
 
             for e in expenses:
-                writer.writerow([e.id, e.name, e.category, e.amount, e.date])
+                writer.writerow([e.id, e.name, e.category, e.amount, e.date.strftime("%d/%m/%Y")])
 
     def delete(self, expense_id):
         expenses = self.load()
@@ -57,5 +58,5 @@ class CSVStorage(Storage):
             writer.writerow(["id", "name", "category", "amount", "date"])
 
             for e in expenses:
-                writer.writerow([e.id, e.name, e.category, e.amount, e.date])
+                writer.writerow([e.id, e.name, e.category, e.amount, e.date.strftime("%d/%m/%Y")])
 

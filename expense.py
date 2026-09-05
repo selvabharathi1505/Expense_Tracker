@@ -1,7 +1,7 @@
-
+from datetime import date
 class Expense:
 
-    def __init__(self, id, name, category, amount, date):
+    def __init__(self, id, name, category, amount, date: date):
         self.id = id
         self.name = name
         self.category = category

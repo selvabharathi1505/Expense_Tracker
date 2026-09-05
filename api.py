@@ -1,7 +1,8 @@
 import os
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from datetime import date
 
 from expense_manager import ExpenseManager
 from csv_storage import CSVStorage
@@ -37,15 +38,15 @@ manager = ExpenseManager(storage)
 class ExpenseCreate(BaseModel):
     name: str
     category: str
-    amount: float
-    date: str
+    amount: float = Field(gt = 0)
+    date: date
 
 
 class ExpenseUpdate(BaseModel):
     name: str
     category: str
-    amount: float
-    date: str
+    amount: float = Field(gt = 0)
+    date: date
 
 
 class ExpenseResponse(BaseModel):
@@ -53,12 +54,20 @@ class ExpenseResponse(BaseModel):
     name: str
     category: str
     amount: float
-    date: str
+    date: date
     
 class SummaryResponse(BaseModel):
     total_spending: float
     category_wise: dict[str, float]
 
+@app.post("/expenses", response_model=ExpenseResponse, status_code=201)
+def create_expense(expense: ExpenseCreate):
+    return manager.add_expense(
+        expense.name,
+        expense.category,
+        expense.amount,
+        expense.date
+    )
 
 @app.get("/expenses", response_model=list[ExpenseResponse])
 def get_expenses():
@@ -78,14 +87,6 @@ def get_expense(expense_id: int):
     return expense
 
 
-@app.post("/expenses", response_model=ExpenseResponse, status_code=201)
-def create_expense(expense: ExpenseCreate):
-    return manager.add_expense(
-        expense.name,
-        expense.category,
-        expense.amount,
-        expense.date
-    )
 
 
 @app.put("/expenses/{expense_id}", response_model=ExpenseResponse)
@@ -126,3 +127,4 @@ def get_summary():
         "total_spending": manager.total_spending(),
         "category_wise": manager.category_wise_spending()
     }
+    

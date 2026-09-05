@@ -1,6 +1,7 @@
 from csv_storage import CSVStorage
 from sqlite_storage import SQLiteStorage
 from expense_manager import ExpenseManager
+from datetime import datetime
 import argparse
 
 
@@ -48,7 +49,7 @@ def main():
                 name = input("Enter Name: ")
                 category = input("Enter Category: ")
                 amount = float(input("Enter Amount: "))
-                date = input("Enter Date (dd/mm/yyyy): ")
+                date = datetime.strptime(input("Enter Date (yyyy-mm-dd): "),"%Y-%m-%d").date()
 
                 manager.add_expense(name,category,amount,date)
             print("Expense added successfully.")
@@ -70,7 +71,7 @@ def main():
             name = input("Enter new Name: ")
             category = input("Enter new Category: ")
             amount = float(input("Enter new Amount: "))
-            date = input("Enter new Date: ")
+            date = datetime.strptime(input("Enter new Date (yyyy-mm-dd): "),"%Y-%m-%d").date()
 
             result = manager.update_expense(expense_id,name,category,amount,date)
 
