@@ -1,16 +1,17 @@
 from expense import Expense
 from expense_manager import ExpenseManager
 from csv_storage import CSVStorage
+from datetime import date
 
 def test_total_spending(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
     
-    expense1 = Expense(1, "Lunch", "Food", 20, "23/08/2026")
+    expense1 = Expense(1, "Lunch", "Food", 20, date(2026, 8, 23))
     storage.add(expense1)
-    expense2 = Expense(2, "Uber", "Travel", 30, "23/08/2026")
+    expense2 = Expense(2, "Uber", "Travel", 30, date(2026, 8, 23))
     storage.add(expense2)
-    expense3 = Expense(3, "Dinner", "Food", 40, "23/08/2026")
+    expense3 = Expense(3, "Dinner", "Food", 40, date(2026, 8, 23))
     storage.add(expense3)
 
     manager = ExpenseManager(storage)
@@ -21,8 +22,8 @@ def test_category_wise_spending(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
-    expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
-    expense2 = Expense(2,"Uber","Travel",30,"23/08/2026")
+    expense1 = Expense(1,"Lunch","Food",20,date(2026, 8, 23))
+    expense2 = Expense(2,"Uber","Travel",30,date(2026, 8, 23))
     storage.add(expense1)
     storage.add(expense2)
     manager = ExpenseManager(storage)
@@ -35,22 +36,22 @@ def test_add_expense(tmp_path):
     storage = CSVStorage(test_file)
 
     manager = ExpenseManager(storage)
-    manager.add_expense("Lunch", "Food", 20,"23/08/2026")
+    manager.add_expense("Lunch", "Food", 20, date(2026, 8, 23))
     expenses = storage.load()
 
     assert len(expenses) == 1
     assert expenses[0].name == "Lunch"
     assert expenses[0].category == "Food"
     assert expenses[0].amount == 20
-    assert expenses[0].date == "23/08/2026"
+    assert expenses[0].date == date(2026, 8, 23)
 
 def test_update_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
-    expense1 = Expense(1, "Lunch", "Food", 20, "23/08/2026")
-    expense2 = Expense(2, "Uber", "Travel", 30, "23/08/2026")
-    expense3 = Expense(3, "Dinner", "Food", 40, "23/08/2026")
+    expense1 = Expense(1, "Lunch", "Food", 20, date(2026, 8, 23))
+    expense2 = Expense(2, "Uber", "Travel", 30, date(2026, 8, 23))
+    expense3 = Expense(3, "Dinner", "Food", 40, date(2026, 8, 23))
 
     storage.add(expense1)
     storage.add(expense2)
@@ -58,7 +59,7 @@ def test_update_expense(tmp_path):
 
     manager = ExpenseManager(storage)
 
-    result = manager.update_expense(2,"Uber","Travel",50,"23/08/2026")
+    result = manager.update_expense(2,"Uber","Travel",50,date(2026, 8, 23))
 
     assert result is True
 
@@ -72,11 +73,11 @@ def test_update_nonexistent_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
-    expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
+    expense1 = Expense(1,"Lunch","Food",20,date(2026, 8, 23))
     storage.add(expense1)
 
     manager = ExpenseManager(storage)
-    result = manager.update_expense(99,"Dinner","Food",40,"23/08/2026")
+    result = manager.update_expense(99,"Dinner","Food",40,date(2026, 8, 23))
 
     assert result is False
     expenses = storage.load()
@@ -90,9 +91,9 @@ def test_delete_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
 
-    expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
-    expense2 = Expense(2,"Uber","Travel",30,"23/08/2026")
-    expense3 = Expense(3,"Dinner","Food",40,"23/08/2026")
+    expense1 = Expense(1,"Lunch","Food",20,date(2026, 8, 23))
+    expense2 = Expense(2,"Uber","Travel",30,date(2026, 8, 23))
+    expense3 = Expense(3,"Dinner","Food",40,date(2026, 8, 23))
 
     storage.add(expense1)
     storage.add(expense2)
@@ -113,7 +114,7 @@ def test_delete_nonexistent_expense(tmp_path):
     test_file = tmp_path / "test_expenses.csv"
     storage = CSVStorage(test_file)
     
-    expense1 = Expense(1,"Lunch","Food",20,"23/08/2026")
+    expense1 = Expense(1,"Lunch","Food",20,date(2026, 8, 23))
     storage.add(expense1)
     
     manager = ExpenseManager(storage)
