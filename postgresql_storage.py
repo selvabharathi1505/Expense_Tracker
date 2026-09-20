@@ -11,5 +11,18 @@ class PostgresSQLStorage:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT id, name, category, amount, date FROM expenses")
-        cursor.fetchall()
+        rows=cursor.fetchall()
+        expenses = []
+        for row in rows:
+            expense = Expense(row[0], row[1], row[2], float(row[3]), row[4])
+            expenses.append(expense)
+        cursor.close()
+        conn.close()
+        return expenses
         
+storage = PostgresSQLStorage("dbname=expense_tracker user=postgres password=selva host=localhost")
+
+expenses = storage.load()
+
+for expense in expenses:
+    expense.display()
