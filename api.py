@@ -1,39 +1,14 @@
-import os
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from datetime import date
 
 from expense_manager import ExpenseManager
-from csv_storage import CSVStorage
-from sqlite_storage import SQLiteStorage
-
+from postgresql_storage import PostgreSQLStorage
 
 app = FastAPI()
 
-
-storage_type = os.getenv("STORAGE_TYPE")
-
-if storage_type is None:
-    raise ValueError(
-        "STORAGE_TYPE is required. Please set it to 'csv' or 'sqlite'."
-    )
-
-if storage_type == "csv":
-    storage = CSVStorage("expenses.csv")
-
-elif storage_type == "sqlite":
-    storage = SQLiteStorage("expenses.db")
-
-else:
-    raise ValueError(
-        f"Invalid storage type: {storage_type}. "
-        "Please choose 'csv' or 'sqlite'."
-    )
-
-
+storage = PostgreSQLStorage()
 manager = ExpenseManager(storage)
-
 
 class ExpenseCreate(BaseModel):
     name: str
@@ -70,8 +45,8 @@ def create_expense(expense: ExpenseCreate):
     )
 
 @app.get("/expenses", response_model=list[ExpenseResponse])
-def get_expenses():
-    return manager.get_expenses()
+def get_expenses(limit: int = 20, offset: int = 0):
+    return manager.get_expenses(limit, offset)
 
 
 @app.get("/expenses/{expense_id}", response_model=ExpenseResponse)
