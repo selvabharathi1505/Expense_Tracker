@@ -1,374 +1,168 @@
 # Expense Tracker
 
-A Python-based command-line Expense Tracker that allows users to **add, view, update, and delete expenses**.
-
-The application supports two storage methods:
-
-* **CSV file storage**
-* **SQLite database storage**
-
-The storage method can be selected when running the application through a command-line argument.
+A backend Expense Tracker application built with Python, FastAPI, PostgreSQL, and automated testing.
 
 ## Features
 
-* Add one or multiple expenses
-* View all stored expenses
-* Update an existing expense using its ID
-* Delete an expense using its ID
-* Store data using CSV
-* Store data using SQLite
-* Common storage interface using an abstract base class
-* Command-line storage selection using `argparse`
-* Object-oriented design
+* Add expenses
+* View expenses
+* View a single expense by ID
+* Update expenses
+* Delete expenses
+* View total spending
+* View category-wise spending
+* Pagination using `limit` and `offset`
+* Input validation using Pydantic
+* PostgreSQL database storage
+* Separate PostgreSQL database for testing
+* Automated API and unit tests
 
 ## Technologies Used
 
-* **Python**
-* **CSV**
-* **SQLite**
-* **Object-Oriented Programming (OOP)**
-* **Abstract Base Class (ABC)**
-* **Command-Line Arguments**
-* **Git & GitHub**
+* Python
+* FastAPI
+* PostgreSQL
+* Psycopg
+* Pydantic
+* Pytest
+* Git & GitHub
 
 ## Project Structure
 
 ```text
 Expense_Tracker/
 │
-├── main.py
+├── api.py
 ├── expense.py
 ├── expense_manager.py
+├── main.py
+├── postgresql_storage.py
 ├── storage.py
-├── csv_storage.py
-├── sqlite_storage.py
-├── expenses.csv
-├── expenses.db
+├── requirements.txt
+├── .env
 ├── .gitignore
-└── README.md
+│
+└── test/
+    ├── test_api.py
+    └── test_expense_tracker.py
 ```
 
-### File Description
+## API Endpoints
 
-| File                 | Description                                   |
-| -------------------- | --------------------------------------------- |
-| `main.py`            | Application entry point and storage selection |
-| `expense.py`         | Defines the Expense object                    |
-| `expense_manager.py` | Contains expense management operations        |
-| `storage.py`         | Defines the common Storage interface          |
-| `csv_storage.py`     | Implements storage using a CSV file           |
-| `sqlite_storage.py`  | Implements storage using SQLite               |
-| `expenses.csv`       | CSV data file                                 |
-| `expenses.db`        | SQLite database file                          |
-| `.gitignore`         | Prevents unnecessary files from being tracked |
+| Method | Endpoint         | Description          |
+| ------ | ---------------- | -------------------- |
+| POST   | `/expenses`      | Create an expense    |
+| GET    | `/expenses`      | Get expenses         |
+| GET    | `/expenses/{id}` | Get expense by ID    |
+| PUT    | `/expenses/{id}` | Update an expense    |
+| DELETE | `/expenses/{id}` | Delete an expense    |
+| GET    | `/summary`       | Get spending summary |
 
-## Architecture
+## Database
 
-The project follows a common storage interface design:
+The application uses PostgreSQL.
+
+Main database:
 
 ```text
-                         main.py
-                            |
-                            v
-                      ExpenseManager
-                            |
-                            v
-                       Storage (ABC)
-                        /        \
-                       /          \
-                      v            v
-                CSVStorage     SQLiteStorage
-                   |              |
-                   v              v
-             expenses.csv     expenses.db
+expense_tracker
 ```
 
-The `Storage` abstract base class defines common operations such as:
+Test database:
 
-* `load()`
-* `add()`
-* `update()`
-* `delete()`
+```text
+expense_tracker_test
+```
 
-Both `CSVStorage` and `SQLiteStorage` implement these operations. This allows `ExpenseManager` to work with either storage method without changing its main logic.
+The test database is kept separate so automated tests do not affect normal application data.
 
-## Requirements
+## API Validation
 
-* Python 3.x
-* No external Python packages are required.
+The API validates:
 
-The project uses Python's built-in `csv`, `sqlite3`, `abc`, and `argparse` modules.
+* Required fields
+* Positive expense amounts
+* Valid dates
+* Correct data types
 
-## How to Run
+Invalid requests return appropriate HTTP validation errors.
 
-### 1. Clone the Repository
+## Testing
+
+The project uses `pytest` for automated testing.
+
+Tests cover:
+
+* Adding expenses
+* Getting expenses
+* Getting an expense by ID
+* Updating expenses
+* Deleting expenses
+* Non-existent expense IDs
+* Total spending
+* Category-wise spending
+* API validation
+* Invalid amounts
+* Missing fields
+* Invalid dates
+* Invalid data types
+
+Current test result:
+
+```text
+22 passed
+```
+
+Run tests with:
 
 ```bash
-git clone https://github.com/selvabharathi1505/Expense_Tracker.git
+python -m pytest
 ```
 
-### 2. Navigate to the Project Directory
+## Running the API
+
+Install dependencies:
 
 ```bash
-cd Expense_Tracker
+pip install -r requirements.txt
 ```
 
-### 3. Select the Storage Method
+Set the PostgreSQL connection string in `.env`:
 
-The storage method is selected using a command-line argument.
+```env
+DATABASE_URL=your_database_connection_string
+```
 
-#### CSV Storage
+Start the FastAPI application:
 
 ```bash
-python main.py --storage csv
+python -m uvicorn api:app --reload
 ```
 
-Output:
+API documentation is available through FastAPI Swagger UI at:
 
 ```text
-Using CSV Storage
+http://127.0.0.1:8000/docs
 ```
 
-#### SQLite Storage
+## Project Roadmap
 
-```bash
-python main.py 2
+* [x] Basic Expense Tracker
+* [x] Interactive CLI
+* [x] CSV Storage
+* [x] Storage Abstraction
+* [x] SQLite Storage
+* [x] CLI Storage Selection
+* [x] CRUD & Summaries
+* [x] Unit Testing
+* [x] FastAPI
+* [x] API Testing & Validation
+* [x] PostgreSQL
+* [ ] Docker
+* [ ] Web UI
+* [ ] Authentication
+* [ ] Deployment
+* [ ] CI/CD
+* [ ] AI Expense Assistant
+
 ```
-
-Output:
-
-```text
-Using SQLite Storage
-```
-
-### Quick Reference
-
-| Command                             | Storage Method |
-| ------------------ | -------------- |
-| `python main.py --storage csv`      | CSV            |
-| `python main.py --storage sqlite`   | SQLite         |
-
-## Expense Menu
-
-After selecting the storage method, the application displays:
-
-```text
-1. Add Expense
-2. Show Expenses
-3. Update Expense
-4. Delete Expense
-5. Exit
-```
-
-### 1. Add Expense
-
-Select option `1` to add expenses.
-
-The application asks for:
-
-* Number of expenses
-* Name
-* Category
-* Amount
-* Date
-
-Example:
-
-```text
-Enter how many expenses to be added: 1
-
-Enter the details for expense 1:
-Enter Name: Lunch
-Enter Category: Food
-Enter Amount: 150
-Enter Date (dd/mm/yyyy): 18/08/2026
-```
-
-### 2. Show Expenses
-
-Select option `2` to display the stored expenses.
-
-### 3. Update Expense
-
-Select option `3` and provide the expense ID.
-
-The application allows you to update:
-
-* Name
-* Category
-* Amount
-* Date
-
-### 4. Delete Expense
-
-Select option `4` and provide the expense ID to delete the expense.
-
-### 5. Exit
-
-Select option `5` to close the application.
-
-## CSV Storage
-
-When you run:
-
-```bash
-python main.py --storage csv
-```
-
-the application uses `CSVStorage`.
-
-Expenses are stored in:
-
-```text
-expenses.csv
-```
-
-The CSV file contains:
-
-```text
-id,name,category,amount,date
-```
-
-CSV storage provides a simple file-based approach for storing expense records.
-
-## SQLite Storage
-
-When you run:
-
-```bash
-python main.py --storage sqlite
-```
-
-the application uses `SQLiteStorage`.
-
-Expenses are stored in:
-
-```text
-expenses.db
-```
-
-The SQLite database contains an `expenses` table with the following fields:
-
-```text
-id
-name
-category
-amount
-date
-```
-
-SQLite provides structured database operations for adding, retrieving, updating, and deleting individual expense records.
-
-## CSV vs SQLite
-
-| Feature                      | CSV                                | SQLite                     |
-| ---------------------------- | ---------------------------------- | -------------------------- |
-| Storage type                 | File                               | Database                   |
-| File                         | `expenses.csv`                     | `expenses.db`              |
-| Structured queries           | Limited                            | Supported                  |
-| Individual record operations | Implemented through file rewriting | Database operations        |
-| Setup                        | Very simple                        | Very simple                |
-| Best suited for              | Simple/small data                  | Structured data management |
-
-## Object-Oriented Design
-
-The project separates responsibilities into different classes.
-
-### Expense
-
-Represents an individual expense containing:
-
-* ID
-* Name
-* Category
-* Amount
-* Date
-
-### ExpenseManager
-
-Handles the application's expense operations:
-
-* Add
-* Show
-* Update
-* Delete
-
-### Storage
-
-Defines the common interface that storage implementations must follow.
-
-### CSVStorage
-
-Handles reading and writing expenses using a CSV file.
-
-### SQLiteStorage
-
-Handles expense records using an SQLite database.
-
-This separation makes the project easier to maintain and allows different storage implementations to be used with the same `ExpenseManager`.
-
-## Example
-
-Run the application with CSV:
-
-```bash
-python main.py --storage csv
-```
-
-Then:
-
-```text
-Using CSV Storage
-
-1. Add Expense
-2. Show Expenses
-3. Update Expense
-4. Delete Expense
-5. Exit
-
-Enter choice: 1
-```
-
-To use SQLite instead:
-
-```bash
-python main.py --storage sqlite
-```
-
-## Future Improvements
-
-Possible future enhancements include:
-
-* Add expense search and filtering
-* Add monthly and category-wise expense summaries
-* Add total expense calculation
-* Add graphical user interface (GUI)
-* Add data visualization
-* Add input validation
-
-## Learning Objectives
-
-This project demonstrates practical use of:
-
-* Python classes and objects
-* Abstraction
-* Abstract base classes
-* Inheritance
-* File handling
-* CSV handling
-* SQLite database operations
-* Command-line arguments
-* Separation of concerns
-* Interface-based design
-
-## Author
-
-**Selvabharathi S**
-
-## Repository
-
-[Expense Tracker on GitHub](https://github.com/selvabharathi1505/Expense_Tracker)
-
-## License
-
-This project is created for educational and portfolio purposes.
