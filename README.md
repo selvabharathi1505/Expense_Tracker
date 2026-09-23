@@ -38,7 +38,6 @@ Expense_Tracker/
 ├── main.py
 ├── postgresql_storage.py
 ├── storage.py
-├── requirements.txt
 ├── .env
 ├── .gitignore
 │
@@ -122,10 +121,6 @@ python -m pytest
 ## Running the API
 
 Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
 
 Set the PostgreSQL connection string in `.env`:
 
