@@ -1,8 +1,13 @@
 from abc import ABC, abstractmethod
+
 class Storage(ABC):
 
     @abstractmethod
-    def load(self):
+    def get_expenses(self, limit, offset):
+        pass
+
+    @abstractmethod
+    def get_by_id(self, expense_id):
         pass
 
     @abstractmethod
@@ -15,4 +20,12 @@ class Storage(ABC):
 
     @abstractmethod
     def delete(self, expense_id):
+        pass
+
+    @abstractmethod
+    def total_spending(self):
+        pass
+
+    @abstractmethod
+    def category_wise_spending(self):
         pass

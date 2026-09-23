@@ -1,31 +1,12 @@
-from csv_storage import CSVStorage
-from sqlite_storage import SQLiteStorage
-from expense_manager import ExpenseManager
 from datetime import datetime
-import argparse
+
+from expense_manager import ExpenseManager
+from postgresql_storage import PostgreSQLStorage
 
 
 def main():
 
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--storage",
-        choices=["csv", "sqlite"],
-        required=True,
-        help="Choose storage type: csv or sqlite"
-    )
-
-    args = parser.parse_args()
-
-    if args.storage == "csv":
-        print("Using CSV Storage")
-        storage = CSVStorage()
-
-    elif args.storage == "sqlite":
-        print("Using SQLite Storage")
-        storage = SQLiteStorage()
-
+    storage = PostgreSQLStorage()
     manager = ExpenseManager(storage)
 
     while True:
@@ -49,9 +30,19 @@ def main():
                 name = input("Enter Name: ")
                 category = input("Enter Category: ")
                 amount = float(input("Enter Amount: "))
-                date = datetime.strptime(input("Enter Date (yyyy-mm-dd): "),"%Y-%m-%d").date()
 
-                manager.add_expense(name,category,amount,date)
+                expense_date = datetime.strptime(
+                    input("Enter Date (yyyy-mm-dd): "),
+                    "%Y-%m-%d"
+                ).date()
+
+                manager.add_expense(
+                    name,
+                    category,
+                    amount,
+                    expense_date
+                )
+
             print("Expense added successfully.")
 
         elif choice == "2":
@@ -59,7 +50,7 @@ def main():
 
         elif choice == "3":
             manager.show_expenses()
-            
+
             expenses = manager.get_expenses()
 
             if not expenses:
@@ -71,18 +62,28 @@ def main():
             name = input("Enter new Name: ")
             category = input("Enter new Category: ")
             amount = float(input("Enter new Amount: "))
-            date = datetime.strptime(input("Enter new Date (yyyy-mm-dd): "),"%Y-%m-%d").date()
 
-            result = manager.update_expense(expense_id,name,category,amount,date)
+            expense_date = datetime.strptime(
+                input("Enter new Date (yyyy-mm-dd): "),
+                "%Y-%m-%d"
+            ).date()
+
+            result = manager.update_expense(
+                expense_id,
+                name,
+                category,
+                amount,
+                expense_date
+            )
 
             if result:
                 print("Expense updated successfully.")
             else:
-                print("Expense ID not found")
+                print("Expense ID not found.")
 
         elif choice == "4":
             manager.show_expenses()
-            
+
             expenses = manager.get_expenses()
 
             if not expenses:
@@ -96,18 +97,17 @@ def main():
             if result:
                 print("Expense deleted successfully.")
             else:
-                print("Expense ID not found")
-
+                print("Expense ID not found.")
 
         elif choice == "5":
             manager.show_summary()
-            
+
         elif choice == "6":
             print("Exiting...")
             break
 
         else:
-            print("Invalid choice")
+            print("Invalid choice.")
 
 
 if __name__ == "__main__":
