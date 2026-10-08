@@ -3,22 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Expense Tracker</title>
-</head>
-<body>
-     <h1>Expense Tracker</h1>
-
-    <h2>My Expenses</h2>
-
-    <p>Manage your daily expenses.</p>
-
-    <button>Add Expense</button>
-
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -27,7 +14,7 @@
 
     <h2>My Expenses</h2>
 
-    <table border="4">
+    <table class="expense-table">
 
         <thead>
             <tr>
@@ -72,31 +59,33 @@
 
     <h2>Add Expense</h2>
 
-<form>
+    <form id="expense-form">
 
-    <label for="name">Expense Name:</label>
-    <input type="text" id="name" name="expense_name" required>
+        <label for="name">Expense Name:</label>
+        <input type="text" id="name" name="expense_name" required>
 
-    <br><br>
+        <br><br>
 
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="expense_category" required>
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="expense_category" required>
 
-    <br><br>
+        <br><br>
 
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="expense_amount" min="1" required>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="expense_amount" min="1" required>
 
-    <br><br>
+        <br><br>
 
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="expense_date" required>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="expense_date" required>
 
-    <br><br>
+        <br><br>
 
-    <button type="submit">Add Expense</button>
+        <button class="add-button" type="submit">Add Expense</button>
 
-</form>
+    </form>
+    <script src="./script.js"></script>
 
 </body>
 </html>
+
