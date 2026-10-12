@@ -50,3 +50,24 @@ form label {
 form button {
     margin-top: 10px;
 }
+
+
+//error message styling
+
+#error-container {
+    background-color: #fff0f0;
+    border: 1px solid #e0a0a0;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+#error-message {
+    color: #b00020;
+    font-weight: bold;
+}
+
+#retry-button {
+    padding: 8px 16px;
+    cursor: pointer;
+}

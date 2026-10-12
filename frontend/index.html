@@ -11,8 +11,26 @@
 <body>
 
     <h1>Expense Tracker</h1>
+    
+    <div id="error-container" hidden>
+    <p id="error-message">
+        Unable to connect to the server. Please check your connection and try again.
+    </p>
+    <button id="retry-button" type="button">Retry</button>
+</div>
 
     <h2>My Expenses</h2>
+
+    
+<section id="summary">
+    <h2>Spending Summary</h2>
+
+    <h3>Total Spending: ₹<span id="total-spending">0</span></h3>
+
+    <h3>Category-wise Spending</h3>
+    <ul id="category-summary"></ul>
+</section>
+
 
     <table class="expense-table">
 
@@ -27,31 +45,7 @@
             </tr>
         </thead>
 
-        <tbody>
-
-            <tr>
-                <td>1</td>
-                <td>Lunch</td>
-                <td>Food</td>
-                <td>₹200</td>
-                <td>2026-10-06</td>
-                <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>2</td>
-                <td>Bus</td>
-                <td>Travel</td>
-                <td>₹50</td>
-                <td>2026-10-06</td>
-                <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
+        <tbody id ="expense-list">
 
         </tbody>
 
@@ -84,6 +78,7 @@
         <button class="add-button" type="submit">Add Expense</button>
 
     </form>
+    
     <script src="./script.js"></script>
 
 </body>

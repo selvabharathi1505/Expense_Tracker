@@ -4,8 +4,17 @@ from datetime import date
 
 from expense_manager import ExpenseManager
 from postgresql_storage import PostgreSQLStorage
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 storage = PostgreSQLStorage()
 manager = ExpenseManager(storage)
