@@ -1,3 +1,109 @@
+const API_URL = "http://127.0.0.1:8000";
+
+const authSection = document.getElementById("auth-section");
+const expenseSection = document.getElementById("expense-section");
+const authMessage = document.getElementById("auth-message");
+
+// Register a new user
+document.getElementById("register-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const username = document.getElementById("register-username").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+
+    authMessage.textContent = "";
+
+    try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const detail = data.detail;
+            throw new Error(
+                typeof detail === "string"
+                    ? detail
+                    : "Registration failed. Please check your details."
+            );
+        }
+
+        authMessage.textContent =
+            "Registration successful! Please log in.";
+
+        document.getElementById("register-form").reset();
+
+    } catch (error) {
+        authMessage.textContent =
+            error.message === "Failed to fetch"
+                ? "Unable to connect to the server. Please check whether the backend is running."
+                : error.message;
+    }
+});
+
+
+let accessToken = null;
+
+document.getElementById("login-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    authMessage.textContent = "";
+
+    try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Login failed");
+        }
+
+        accessToken = data.access_token;
+
+        authSection.hidden = true;
+        expenseSection.hidden = false;
+
+        await loadExpenses();
+        await loadSummary();
+
+    } catch (error) {
+        authMessage.textContent = error.message;
+    }
+});
+
+
+function authFetch(url, options = {}) {
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            "Authorization": `Bearer ${accessToken}`
+        }
+    });
+}
+
+
+
+
 const form = document.getElementById("expense-form");
 
 form.addEventListener("submit", function(event) {
@@ -33,7 +139,7 @@ form.addEventListener("submit", function(event) {
     
 const expenseJSON = JSON.stringify(expense);
 
-fetch("http://127.0.0.1:8000/expenses", {
+authFetch(`${API_URL}/expenses`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -64,7 +170,7 @@ fetch("http://127.0.0.1:8000/expenses", {
 
 async function loadExpenses() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/expenses");
+        const response = await authFetch(`${API_URL}/expenses`);
 
         if (!response.ok) {
             throw new Error("Failed to load expenses");
@@ -101,8 +207,6 @@ async function loadExpenses() {
     }
 }
 
-loadExpenses();
-
 //delete expense
 async function deleteExpense(expenseId) {
     const confirmed = confirm("Are you sure you want to delete this expense?");
@@ -112,8 +216,8 @@ async function deleteExpense(expenseId) {
     }
 
     try {
-        const response = await fetch(
-            `http://127.0.0.1:8000/expenses/${expenseId}`,
+        const response = await authFetch(
+            `${API_URL}/expenses/${expenseId}`,
             {
                 method: "DELETE"
             }
@@ -139,10 +243,10 @@ async function deleteExpense(expenseId) {
 
 async function editExpense(expenseId) {
     try {
-        const getResponse = await fetch(
-            `http://127.0.0.1:8000/expenses/${expenseId}`
+        const getResponse = await authFetch(
+        `${API_URL}/expenses/${expenseId}`
         );
-
+        
         if (!getResponse.ok) {
             throw new Error("Failed to load expense");
         }
@@ -169,8 +273,8 @@ async function editExpense(expenseId) {
             return;
         }
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/expenses/${expenseId}`,
+        const response = await authFetch(
+            `${API_URL}/expenses/${expenseId}`,
             {
                 method: "PUT",
                 headers: {
@@ -204,7 +308,7 @@ async function editExpense(expenseId) {
 
 async function loadSummary() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/summary");
+        const response = await authFetch(`${API_URL}/summary`);
 
         if (!response.ok) {
             throw new Error("Failed to load summary");
@@ -232,8 +336,6 @@ async function loadSummary() {
         console.error("Error Loading summary:", error);
     }
 }
-
-loadSummary();
 
 //error message when FastAPI server is not running
 
