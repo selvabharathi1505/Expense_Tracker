@@ -16,7 +16,6 @@ The application allows users to manage their personal expenses securely with JWT
 - Category-wise Expense Summary
 - Total Spending Calculation
 - PostgreSQL Database Integration
-- Pagination using LIMIT and OFFSET
 - RESTful API Architecture
 - Frontend and Backend Integration
 
@@ -27,12 +26,10 @@ The application allows users to manage their personal expenses securely with JWT
 | Python | Backend Programming |
 | FastAPI | REST API Development |
 | PostgreSQL | Database |
-| Psycopg | PostgreSQL Connection |
 | HTML | Frontend Structure |
 | CSS | Frontend Styling |
 | JavaScript | Frontend Functionality |
 | JWT | Authentication |
-| Pytest | Testing |
 | Git & GitHub | Version Control |
 
 ## 📂 Project Structure
@@ -54,8 +51,6 @@ expense_manager/
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
-│
-├── requirements.txt
 ├── .env
 ├── .gitignore
 └── README.md
