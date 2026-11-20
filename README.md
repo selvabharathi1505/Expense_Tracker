@@ -1,163 +1,184 @@
-# Expense Tracker
+# 💰 Expense Tracker
 
-A backend Expense Tracker application built with Python, FastAPI, PostgreSQL, and automated testing.
+A full-stack Expense Tracker application built using **Python, FastAPI, PostgreSQL, HTML, CSS, and JavaScript**.
 
-## Features
+The application allows users to manage their personal expenses securely with JWT authentication, expense summaries, and CRUD operations.
 
-* Add expenses
-* View expenses
-* View a single expense by ID
-* Update expenses
-* Delete expenses
-* View total spending
-* View category-wise spending
-* Pagination using `limit` and `offset`
-* Input validation using Pydantic
-* PostgreSQL database storage
-* Separate PostgreSQL database for testing
-* Automated API and unit tests
+## 🚀 Features
 
-## Technologies Used
+- User Registration and Login
+- JWT-based Authentication
+- User-specific Expense Management
+- Add New Expenses
+- View All Expenses
+- Update Existing Expenses
+- Delete Expenses
+- Category-wise Expense Summary
+- Total Spending Calculation
+- PostgreSQL Database Integration
+- Pagination using LIMIT and OFFSET
+- RESTful API Architecture
+- Frontend and Backend Integration
 
-* Python
-* FastAPI
-* PostgreSQL
-* Psycopg
-* Pydantic
-* Pytest
-* Git & GitHub
+## 🛠️ Tech Stack
 
-## Project Structure
+| Technology | Purpose |
+|---|---|
+| Python | Backend Programming |
+| FastAPI | REST API Development |
+| PostgreSQL | Database |
+| Psycopg | PostgreSQL Connection |
+| HTML | Frontend Structure |
+| CSS | Frontend Styling |
+| JavaScript | Frontend Functionality |
+| JWT | Authentication |
+| Pytest | Testing |
+| Git & GitHub | Version Control |
+
+## 📂 Project Structure
 
 ```text
-Expense_Tracker/
+expense_manager/
 │
 ├── api.py
+├── app.py
 ├── expense.py
 ├── expense_manager.py
-├── main.py
-├── postgresql_storage.py
 ├── storage.py
+├── postgresql_storage.py
+├── user_storage.py
+│
+├── tests/
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── requirements.txt
 ├── .env
 ├── .gitignore
-│
-└── test/
-    ├── test_api.py
-    └── test_expense_tracker.py
+└── README.md
 ```
 
-## API Endpoints
+## ⚙️ Installation and Setup
 
-| Method | Endpoint         | Description          |
-| ------ | ---------------- | -------------------- |
-| POST   | `/expenses`      | Create an expense    |
-| GET    | `/expenses`      | Get expenses         |
-| GET    | `/expenses/{id}` | Get expense by ID    |
-| PUT    | `/expenses/{id}` | Update an expense    |
-| DELETE | `/expenses/{id}` | Delete an expense    |
-| GET    | `/summary`       | Get spending summary |
-
-## Database
-
-The application uses PostgreSQL.
-
-Main database:
-
-```text
-expense_tracker
-```
-
-Test database:
-
-```text
-expense_tracker_test
-```
-
-The test database is kept separate so automated tests do not affect normal application data.
-
-## API Validation
-
-The API validates:
-
-* Required fields
-* Positive expense amounts
-* Valid dates
-* Correct data types
-
-Invalid requests return appropriate HTTP validation errors.
-
-## Testing
-
-The project uses `pytest` for automated testing.
-
-Tests cover:
-
-* Adding expenses
-* Getting expenses
-* Getting an expense by ID
-* Updating expenses
-* Deleting expenses
-* Non-existent expense IDs
-* Total spending
-* Category-wise spending
-* API validation
-* Invalid amounts
-* Missing fields
-* Invalid dates
-* Invalid data types
-
-Current test result:
-
-```text
-22 passed
-```
-
-Run tests with:
+### 1. Clone the Repository
 
 ```bash
-python -m pytest
+git clone https://github.com/selvabharathi1505/Expense_Tracker.git
 ```
 
-## Running the API
+### 2. Navigate to the Project
 
-Install dependencies:
+```bash
+cd Expense_Tracker
+```
 
-Set the PostgreSQL connection string in `.env`:
+### 3. Create a Virtual Environment
+
+```bash
+python -m venv env
+```
+
+### 4. Activate Virtual Environment
+
+Windows PowerShell:
+
+```powershell
+.\env\Scripts\Activate.ps1
+```
+
+### 5. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Configure Environment Variables
+
+Create a `.env` file:
 
 ```env
-DATABASE_URL=your_database_connection_string
+DATABASE_URL=your_postgresql_connection_string
+SECRET_KEY=your_secret_key
 ```
 
-Start the FastAPI application:
+Never commit your `.env` file to GitHub.
+
+### 7. Run the Application
 
 ```bash
 python -m uvicorn api:app --reload
 ```
 
-API documentation is available through FastAPI Swagger UI at:
+### 8. Access the API Documentation
+
+Open:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-## Project Roadmap
+## 🔐 Authentication
 
-* [x] Basic Expense Tracker
-* [x] Interactive CLI
-* [x] CSV Storage
-* [x] Storage Abstraction
-* [x] SQLite Storage
-* [x] CLI Storage Selection
-* [x] CRUD & Summaries
-* [x] Unit Testing
-* [x] FastAPI
-* [x] API Testing & Validation
-* [x] PostgreSQL
-* [ ] Docker
-* [ ] Web UI
-* [ ] Authentication
-* [ ] Deployment
-* [ ] CI/CD
-* [ ] AI Expense Assistant
+The application uses JWT-based authentication.
 
+- Users can register and log in.
+- Successful login generates an access token.
+- Protected endpoints require a valid token.
+- Each user can access only their own expenses.
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/auth/register` | Register a user |
+| POST | `/auth/login` | User login |
+| GET | `/expenses` | Get user expenses |
+| GET | `/expenses/{id}` | Get expense by ID |
+| POST | `/expenses` | Add an expense |
+| PUT | `/expenses/{id}` | Update an expense |
+| DELETE | `/expenses/{id}` | Delete an expense |
+| GET | `/summary` | Get expense summary |
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+python -m pytest -v
 ```
+
+## 🎯 Project Goals
+
+This project demonstrates practical implementation of:
+
+- Object-Oriented Programming
+- Clean Backend Architecture
+- REST API Development
+- Database Integration
+- Authentication and Authorization
+- Frontend and Backend Communication
+- Unit Testing
+- Version Control
+
+## 🔮 Future Improvements
+
+- Docker Containerization
+- Cloud Deployment
+- Improved UI/UX
+- Advanced Expense Analytics
+- Monthly and Yearly Reports
+
+## 👨‍💻 Developer
+
+**Selvabharathi S**
+
+B.Tech Graduate | Aspiring Software Developer
+
+GitHub: https://github.com/selvabharathi1505
+
+---
+
+⭐ If you find this project interesting, consider giving it a star!
