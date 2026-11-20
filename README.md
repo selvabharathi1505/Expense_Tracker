@@ -84,13 +84,7 @@ Windows PowerShell:
 .\env\Scripts\Activate.ps1
 ```
 
-### 5. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 6. Configure Environment Variables
+### 5. Configure Environment Variables
 
 Create a `.env` file:
 
@@ -101,13 +95,13 @@ SECRET_KEY=your_secret_key
 
 Never commit your `.env` file to GitHub.
 
-### 7. Run the Application
+### 6. Run the Application
 
 ```bash
 python -m uvicorn api:app --reload
 ```
 
-### 8. Access the API Documentation
+### 7. Access the API Documentation
 
 Open:
 
@@ -137,14 +131,6 @@ The application uses JWT-based authentication.
 | DELETE | `/expenses/{id}` | Delete an expense |
 | GET | `/summary` | Get expense summary |
 
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-python -m pytest -v
-```
-
 ## 🎯 Project Goals
 
 This project demonstrates practical implementation of:
@@ -155,7 +141,6 @@ This project demonstrates practical implementation of:
 - Database Integration
 - Authentication and Authorization
 - Frontend and Backend Communication
-- Unit Testing
 - Version Control
 
 ## 🔮 Future Improvements
